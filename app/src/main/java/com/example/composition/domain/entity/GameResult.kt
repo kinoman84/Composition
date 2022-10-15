@@ -1,8 +1,9 @@
 package com.example.composition.domain.entity
 
-data class GameResult(
+
+data class GameResult (
     val winner: Boolean,
     val countOfRightAnswers: Int,
     val countOfQuestions: Int,
     val gameSettings: GameSettings
-)
+) : java.io.Serializable

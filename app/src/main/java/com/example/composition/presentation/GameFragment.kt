@@ -1,7 +1,6 @@
 package com.example.composition.presentation
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,7 +21,7 @@ class GameFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        parseArguments()
+        parseArgs()
     }
 
     override fun onCreateView(
@@ -55,8 +54,10 @@ class GameFragment : Fragment() {
             .commit()
     }
 
-    private fun parseArguments() {
-        level = requireArguments().getSerializable(KEY_LEVEL) as Level
+    private fun parseArgs() {
+        requireArguments().getParcelable<Level>(KEY_LEVEL)?.let {
+            level = it
+        }
     }
 
     companion object {
@@ -68,7 +69,7 @@ class GameFragment : Fragment() {
 
             return GameFragment().apply {
                 arguments = Bundle().apply {
-                    putSerializable(KEY_LEVEL, level)
+                    putParcelable(KEY_LEVEL, level)
                 }
             }
         }

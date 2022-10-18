@@ -19,13 +19,11 @@ import com.example.composition.domain.entity.Question
 class GameFragment : Fragment() {
 
     private lateinit var level: Level
+    private val viewModelFactory by lazy {
+        GameViewModelFactory(requireActivity().application, level)
+    }
     private val viewModel by lazy {
-        ViewModelProvider(
-            this,
-            ViewModelProvider.AndroidViewModelFactory.getInstance(
-                requireActivity().application
-            )
-        )[GameViewModel::class.java]
+        ViewModelProvider(this, viewModelFactory)[GameViewModel::class.java]
     }
 
     private var _binding: FragmentGameBinding? = null
@@ -59,10 +57,6 @@ class GameFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        if (savedInstanceState == null) {
-            viewModel.startGame(level)
-        }
 
         binding.progressBar.max = 100
         observeViewModel()

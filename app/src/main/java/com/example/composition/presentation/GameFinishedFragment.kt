@@ -36,8 +36,7 @@ class GameFinishedFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        displayGameResult()
-
+        binding.gameResult = gameResult
         binding.buttonRetry.setOnClickListener {
             restartGame()
         }
@@ -46,57 +45,6 @@ class GameFinishedFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    private fun displayGameResult() {
-        displayEmoji()
-        displayRequiredAnswers()
-        displayScoreAnswers()
-        displayRequiredPercentage()
-        displayScorePercentage()
-
-    }
-
-    private fun displayEmoji() {
-        val emojiResource = if (gameResult.winner) {
-            R.drawable.ic_smile
-        } else {
-            R.drawable.ic_sad
-        }
-        binding.emojiResult.setImageResource(emojiResource)
-    }
-
-    private fun displayRequiredAnswers() {
-        binding.tvRequiredAnswers.text = String.format(
-            requireContext().resources.getString(R.string.required_score),
-            gameResult.gameSettings.minCountOfRightAnswers.toString()
-        )
-    }
-
-    private fun displayScoreAnswers() {
-        binding.tvScoreAnswers.text = String.format(
-            requireContext().resources.getString(R.string.score_answers),
-            gameResult.countOfRightAnswers.toString()
-        )
-    }
-
-    private fun displayRequiredPercentage() {
-        binding.tvRequiredPercentage.text = String.format(
-            requireContext().resources.getString(R.string.required_percentage),
-            gameResult.gameSettings.minPercentOfRightAnswers.toString()
-        )
-    }
-
-    private fun displayScorePercentage() {
-        var scorePercentage = 0
-        if (gameResult.countOfQuestions != 0){
-            scorePercentage =((gameResult.countOfRightAnswers /
-                    gameResult.countOfQuestions.toDouble()) * 100).toInt()
-        }
-        binding.tvScorePercentage.text = String.format(
-            requireContext().resources.getString(R.string.score_percentage),
-            scorePercentage.toString()
-        )
     }
 
     private fun restartGame() {

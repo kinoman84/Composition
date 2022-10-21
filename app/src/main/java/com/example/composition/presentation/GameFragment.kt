@@ -57,81 +57,18 @@ class GameFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.progressBar.max = 100
-        observeViewModel()
-        initListeners()
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
 
-
-    }
-
-    private fun observeViewModel() {
-        viewModel.question.observe(viewLifecycleOwner) {
-            showQuestion(it)
-        }
-        viewModel.progressAnswers.observe(viewLifecycleOwner) {
-            updateProgressAnswers(it)
-        }
-        viewModel.formattedTime.observe(viewLifecycleOwner) {
-            updateTimer(it)
-        }
         viewModel.gameResult.observe(viewLifecycleOwner) {
             launchGameFinishFragment(it)
         }
-        viewModel.percentOfRightAnswers.observe(viewLifecycleOwner) {
-            updateProgress(it)
-        }
-        viewModel.enoughCount.observe(viewLifecycleOwner){
-            binding.tvAnswersProgress.setTextColor(getColorByState(it))
-        }
-        viewModel.enoughPercent.observe(viewLifecycleOwner){
-            val color = getColorByState(it)
-            binding.progressBar.progressTintList = ColorStateList.valueOf(color)
-        }
-        viewModel.minPercent.observe(viewLifecycleOwner){
-            binding.progressBar.secondaryProgress = it
-        }
-    }
 
-    private fun getColorByState(goodState: Boolean): Int {
-        val colorResId = if (goodState) {
-            android.R.color.holo_green_light
-        } else {
-            android.R.color.holo_red_light
-        }
-        return ContextCompat.getColor(requireContext(), colorResId)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    private fun initListeners(){
-        for (i in 0 until tvOptions.size) {
-            tvOptions[i].setOnClickListener {
-                viewModel.chooseAnswer(tvOptions[i].text.toString().toInt())
-            }
-        }
-    }
-
-    private fun updateTimer(leftTime: String) {
-        binding.tvTimer.text = leftTime
-    }
-
-    private fun updateProgress(percentOfRightAnswers: Int) {
-        binding.progressBar.setProgress(percentOfRightAnswers, true)
-    }
-
-    private fun updateProgressAnswers(progressAnswers: String) {
-        binding.tvAnswersProgress.text = progressAnswers
-    }
-
-    private fun showQuestion(question: Question) {
-        binding.tvSum.text = question.sum.toString()
-        binding.tvLeftNumber.text = question.visibleNumber.toString()
-        for(i in 0 until tvOptions.size) {
-            tvOptions[i].text = question.options[i].toString()
-        }
     }
 
     private fun launchGameFinishFragment(result: GameResult) {
